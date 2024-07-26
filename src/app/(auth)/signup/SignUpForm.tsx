@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { signUp } from "./action";
-import { PasswordInput } from "@/components/ui/PasswordInput";
+import { PasswordInput } from "@/components/PasswordInput";
 
 const SingUpForm = () => {
 

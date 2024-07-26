@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { ThemeProvider } from 'next-themes';
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -14,7 +15,7 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: {
     template: "%s | devSphere",
-    default: "devSphere"
+    default: "devSphere",
   },
   description: "The social media app for developers",
 };
@@ -27,7 +28,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+        <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+        >{children}</ThemeProvider>
       </body>
     </html>
   );

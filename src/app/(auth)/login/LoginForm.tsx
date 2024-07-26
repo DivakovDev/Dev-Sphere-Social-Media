@@ -7,8 +7,7 @@ import { useForm } from "react-hook-form";
 import { login } from "./actions";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import LoadingButton from "@/components/LoadingButton";
-import { PasswordInput } from "@/components/ui/PasswordInput";
+import { PasswordInput } from "@/components/PasswordInput";
 import { Button } from "@/components/ui/button";
 
 const LoginForm = () => {
