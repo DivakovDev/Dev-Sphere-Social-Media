@@ -1,6 +1,6 @@
 'use client';
 
-import { Editor, EditorContent, useEditor } from '@tiptap/react';
+import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import { submitPost } from './action';
