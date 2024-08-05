@@ -52,7 +52,7 @@ export function useSubmitPostMutation() {
       });
     },
     onError(error) {
-      console.log(error);
+      console.error(error);
       toast({
         variant: "destructive",
         description: "Failed to post. Plase try again later.",
