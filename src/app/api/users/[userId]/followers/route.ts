@@ -4,7 +4,7 @@ import { FollowerInfo } from "@/lib/types";
 
 export async function GET(
   req: Request,
-  { params: { userId } }: { params: { userId: string } }
+  { params: { userId } }: { params: { userId: string } },
 ) {
   try {
     const { user: loggedInUser } = await validateRequest();
@@ -33,7 +33,7 @@ export async function GET(
     });
 
     if (!user) {
-      return Response.json({ error: "User Not Found" }, { status: 404 });
+      return Response.json({ error: "User not found" }, { status: 404 });
     }
 
     const data: FollowerInfo = {
@@ -44,13 +44,13 @@ export async function GET(
     return Response.json(data);
   } catch (error) {
     console.error(error);
-    return Response.json({ error: "Internal Server Error" }, { status: 500 });
+    return Response.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
 export async function POST(
   req: Request,
-  { params: { userId } }: { params: { userId: string } }
+  { params: { userId } }: { params: { userId: string } },
 ) {
   try {
     const { user: loggedInUser } = await validateRequest();
@@ -59,28 +59,32 @@ export async function POST(
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    await prisma.follow.upsert({
-      where: {
-        followerId_followingId: {
+    await prisma.$transaction([
+      prisma.follow.upsert({
+        where: {
+          followerId_followingId: {
+            followerId: loggedInUser.id,
+            followingId: userId,
+          },
+        },
+        create: {
           followerId: loggedInUser.id,
           followingId: userId,
         },
-      },
-      create: {
-        followerId: loggedInUser.id,
-        followingId: userId,
-      },
-      update: {},
-    });
+        update: {},
+      }),
+    ]);
+
+    return new Response();
   } catch (error) {
     console.error(error);
-    return Response.json({ error: "Internal Server Error" }, { status: 500 });
+    return Response.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
 export async function DELETE(
   req: Request,
-  { params: { userId } }: { params: { userId: string } }
+  { params: { userId } }: { params: { userId: string } },
 ) {
   try {
     const { user: loggedInUser } = await validateRequest();
@@ -89,16 +93,18 @@ export async function DELETE(
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    await prisma.follow.deleteMany({
-      where: {
-        followerId: loggedInUser.id,
-        followingId: userId,
-      },
-    });
+    await prisma.$transaction([
+      prisma.follow.deleteMany({
+        where: {
+          followerId: loggedInUser.id,
+          followingId: userId,
+        },
+      }),
+    ]);
 
     return new Response();
   } catch (error) {
     console.error(error);
-    return Response.json({ error: "Internal Server Error" }, { status: 500 });
+    return Response.json({ error: "Internal server error" }, { status: 500 });
   }
 }

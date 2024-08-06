@@ -12,7 +12,7 @@ interface FollowButnProps {
   initialState: FollowerInfo;
 }
 
-export default function FollowButn({ userId, initialState }: FollowButnProps) {
+export default function FollowButton({ userId, initialState }: FollowButnProps) {
   const { toast } = useToast();
 
   const queryClient = useQueryClient();
