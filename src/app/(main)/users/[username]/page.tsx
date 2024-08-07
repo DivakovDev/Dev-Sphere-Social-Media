@@ -12,6 +12,7 @@ import { formatDate } from "date-fns";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cache } from "react";
+import UserFeed from "./UserFeed";
 
 interface PageProps {
   params: { username: string };
@@ -64,6 +65,10 @@ export default async function Page({ params: { username } }: PageProps) {
     <main className="flex w-full min-w-0 gap-5">
       <div className="w-full min-w-0 space-y-5">
         <UserProfile user={user} loggedInUserId={loggedInUser.id} />
+        <div className='rounded-2xl bg-card p-5 shadow-sm'>
+          <h2 className='font-bold text-center text-2xl'>{user.displayName}&apos;s posts</h2>
+        </div>
+        <UserFeed userId={user.id} />
       </div>
       <TrendsSidebar />
     </main>
