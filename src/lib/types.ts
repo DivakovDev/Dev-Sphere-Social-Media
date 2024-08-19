@@ -34,8 +34,16 @@ export function getPostDataInclude(loggedInUserId: string) {
     user: {
       select: getUserDataSelect(loggedInUserId),
     },
-    attachments:true,
+    attachments: true,
     likes: {
+      where: {
+        userId: loggedInUserId,
+      },
+      select: {
+        userId: true,
+      },
+    },
+    bookmarks:{
       where: {
         userId: loggedInUserId,
       },
@@ -65,7 +73,11 @@ export interface FollowerInfo {
   isFollowedByUser: boolean;
 }
 
-export interface LikeInfo{
-  likes: number,
-  isLikedByUser: boolean,
+export interface LikeInfo {
+  likes: number;
+  isLikedByUser: boolean;
+}
+
+export interface BookmarkInfo {
+  isBookmarkedByUser: boolean;
 }
