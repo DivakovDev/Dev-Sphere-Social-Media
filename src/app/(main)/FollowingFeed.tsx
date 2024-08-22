@@ -3,7 +3,7 @@
 import InfiniteScrollContainer from "@/components/InfiniteScrollContainer";
 import Post from "@/components/posts/Post";
 import PostsLoadingSkeleton from "@/components/posts/PostsLoadingSkeleton";
-import kyInstanse from "@/lib/ky";
+import kyInstance from "@/lib/ky";
 import { PostsPage } from "@/lib/types";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
@@ -19,7 +19,7 @@ export default function FollowingFeed() {
   } = useInfiniteQuery({
     queryKey: ["post-feed", "following"],
     queryFn: ({ pageParam }) =>
-      kyInstanse
+      kyInstance
         .get(
           "/api/posts/following",
           pageParam ? { searchParams: { cursor: pageParam } } : {}

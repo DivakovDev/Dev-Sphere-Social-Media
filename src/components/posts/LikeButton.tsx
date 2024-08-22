@@ -6,7 +6,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import kyInstanse from "@/lib/ky";
+import kyInstance from "@/lib/ky";
 import { Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -25,7 +25,7 @@ export default function LikeButton({ postId, initialState }: LikeButnProps) {
   const { data } = useQuery({
     queryKey,
     queryFn: () =>
-      kyInstanse.get(`/api/posts/${postId}/likes`).json<LikeInfo>(),
+      kyInstance.get(`/api/posts/${postId}/likes`).json<LikeInfo>(),
     initialData: initialState,
     staleTime: Infinity,
   });
@@ -33,8 +33,8 @@ export default function LikeButton({ postId, initialState }: LikeButnProps) {
   const { mutate } = useMutation({
     mutationFn: () =>
       data.isLikedByUser
-        ? kyInstanse.delete(`/api/posts/${postId}/likes`)
-        : kyInstanse.post(`/api/posts/${postId}/likes`),
+        ? kyInstance.delete(`/api/posts/${postId}/likes`)
+        : kyInstance.post(`/api/posts/${postId}/likes`),
     onMutate: async () => {
       await queryClient.cancelQueries({
         queryKey,

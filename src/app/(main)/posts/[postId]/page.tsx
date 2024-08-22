@@ -4,7 +4,7 @@ import { getPostDataInclude, UserData } from "@/lib/types";
 import { notFound } from "next/navigation";
 import { validateRequest } from "@/auth";
 import Post from "@/components/posts/Post";
-import UserTooltip from "@/components/UserTooltip.";
+import UserTooltip from "@/components/UserTooltip";
 import Link from "next/link";
 import UserAvatar from "@/components/UserAvatar";
 import { Loader2 } from "lucide-react";

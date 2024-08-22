@@ -8,7 +8,7 @@ import { unstable_cache } from "next/cache";
 import { formatNumber } from "@/lib/utils";
 import FollowButton from "./FollowButton";
 import { getUserDataSelect } from "@/lib/types";
-import UserTooltip from "./UserTooltip.";
+import UserTooltip from "./UserTooltip";
 
 const TrendsSidebar = () => {
   return (
