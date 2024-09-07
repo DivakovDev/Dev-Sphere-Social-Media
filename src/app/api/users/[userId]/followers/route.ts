@@ -73,6 +73,13 @@ export async function POST(
         },
         update: {},
       }),
+      prisma.notification.create({
+        data:{
+          issuerId:loggedInUser.id,
+          recipientId: userId,
+          type: "FOLLOW"
+        }
+      })
     ]);
 
     return new Response();
@@ -100,6 +107,13 @@ export async function DELETE(
           followingId: userId,
         },
       }),
+      prisma.notification.deleteMany({
+        where: {
+          issuerId: loggedInUser.id,
+          recipientId: userId,
+          type: "FOLLOW",
+        }
+      })
     ]);
 
     return new Response();
