@@ -152,7 +152,7 @@ export default function NewChatDialog({
           <LoadingButton
             disabled={!selectedUsers.length}
             loading={mutation.isPending}
-            onClick={() => mutation.mutate}
+            onClick={() => mutation.mutate()}
           >
             Start chat
           </LoadingButton>
