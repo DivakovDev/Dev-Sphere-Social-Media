@@ -1,8 +1,13 @@
-import { ChannelList } from "stream-chat-react";
+import {
+  ChannelList,
+  ChannelPreviewMessenger,
+  ChannelPreviewUIComponentProps,
+} from "stream-chat-react";
 import { useSession } from "../SessionProvider";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
+import { MailPlus, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useCallback } from "react";
 
 interface ChatSidebarProps {
   open: boolean;
@@ -11,6 +16,19 @@ interface ChatSidebarProps {
 
 export default function ChatSidebar({ open, onClose }: ChatSidebarProps) {
   const { user } = useSession();
+
+  const CustomChannelPreview = useCallback(
+    (props: ChannelPreviewUIComponentProps) => (
+      <ChannelPreviewMessenger
+        {...props}
+        onSelect={() => {
+          props.setActiveChannel?.(props.channel, props.watchers);
+          onClose();
+        }}
+      />
+    ),
+    [onClose]
+  );
 
   return (
     <div
@@ -36,6 +54,7 @@ export default function ChatSidebar({ open, onClose }: ChatSidebarProps) {
             },
           },
         }}
+        Preview={CustomChannelPreview}
       />
     </div>
   );
@@ -53,6 +72,14 @@ function MenuHeader({ onClose }: MenuHeaderProps) {
           <X className="size-5" />
         </Button>
       </div>
+      <h1 className="me-auto text-xl font-bold md:ms-2">Messages</h1>{" "}
+      <Button
+          size="icon"
+          variant="ghost"
+          title="Start new chat"
+        >
+          <MailPlus className="size-5" />
+        </Button>
     </div>
   );
 }

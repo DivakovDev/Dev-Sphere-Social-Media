@@ -14,7 +14,7 @@ export const metadata: Metadata = {
         <div className="flex flex-row h-full max-h-[40rem] w-full max-w-[64rem] rounded-2xl overflow-hidden bg-card shadow-2xl">
           <div className="md:w-1/2 w-full space-y-10 overflow-y-auto p-10">
             <div className='space-y-1 text-center'>
-              <h1 className='text-center text-3xl text-gray-700 font-bold'>Login to <span className='text-[#7c3aed]'>dev</span>Sphere</h1>
+              <h1 className='text-center text-3xl font-bold'>Login to <span className='text-[#7c3aed]'>dev</span>Sphere</h1>
             </div>
             <div className='space-y-5'>
               <LoginForm/>
