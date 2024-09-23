@@ -1,16 +1,16 @@
-import prisma from "@/lib/prisma";
-import { cache, Suspense } from "react";
-import { getPostDataInclude, UserData } from "@/lib/types";
-import { notFound } from "next/navigation";
 import { validateRequest } from "@/auth";
-import Post from "@/components/posts/Post";
-import UserTooltip from "@/components/UserTooltip";
-import Link from "next/link";
-import UserAvatar from "@/components/UserAvatar";
-import { Loader2 } from "lucide-react";
-import Linkify from "@/components/Linkify";
 import FollowButton from "@/components/FollowButton";
+import Linkify from "@/components/Linkify";
+import Post from "@/components/posts/Post";
+import UserAvatar from "@/components/UserAvatar";
+import UserTooltip from "@/components/UserTooltip";
+import prisma from "@/lib/prisma";
+import { getPostDataInclude, UserData } from "@/lib/types";
+import { Loader2 } from "lucide-react";
 import { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { cache, Suspense } from "react";
 
 interface PageProps {
   params: { postId: string };
@@ -57,11 +57,11 @@ export default async function Page({ params: { postId } }: PageProps) {
   const post = await getPost(postId, user.id);
 
   return (
-    <main className="flex min-w-0 w-full gap-5">
+    <main className="flex w-full min-w-0 gap-5">
       <div className="w-full min-w-0 space-y-5">
         <Post post={post} />
       </div>
-      <div className="sticky top-[5.25rem] hidden lg:block w-80 h-fit flex-none ">
+      <div className="sticky top-[5.25rem] hidden h-fit w-80 flex-none lg:block">
         <Suspense fallback={<Loader2 className="mx-auto animate-spin" />}>
           <UserInfoSidebar user={post.user} />
         </Suspense>
@@ -76,6 +76,7 @@ interface UserInfoSidebarProps {
 
 async function UserInfoSidebar({ user }: UserInfoSidebarProps) {
   const { user: loggedInUser } = await validateRequest();
+
   if (!loggedInUser) return null;
 
   return (
@@ -87,24 +88,31 @@ async function UserInfoSidebar({ user }: UserInfoSidebarProps) {
           className="flex items-center gap-3"
         >
           <UserAvatar avatarUrl={user.avatarUrl} className="flex-none" />
-          <div className=''>
-            <p className='line-clamp-1 break-all font-semibold hover:underline'>{user.displayName}</p>
-            <p className='line-clamp-1 break-all text-muted-foreground'>@{user.username}</p>
+          <div>
+            <p className="line-clamp-1 break-all font-semibold hover:underline">
+              {user.displayName}
+            </p>
+            <p className="line-clamp-1 break-all text-muted-foreground">
+              @{user.username}
+            </p>
           </div>
         </Link>
       </UserTooltip>
       <Linkify>
-        <div className='line-clamp-6 whitespace-pre-line break-words text-muted-foreground'>
-            {user.bio}
+        <div className="line-clamp-6 whitespace-pre-line break-words text-muted-foreground">
+          {user.bio}
         </div>
       </Linkify>
       {user.id !== loggedInUser.id && (
-        <FollowButton userId={user.id} initialState={{
+        <FollowButton
+          userId={user.id}
+          initialState={{
             followers: user._count.followers,
             isFollowedByUser: user.followers.some(
-                ({followerId}) => followerId === loggedInUser.id
-            )
-        }}/>
+              ({ followerId }) => followerId === loggedInUser.id,
+            ),
+          }}
+        />
       )}
     </div>
   );
