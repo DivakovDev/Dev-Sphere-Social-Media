@@ -10,6 +10,7 @@ import UserAvatar from "@/components/UserAvatar";
 import { Loader2 } from "lucide-react";
 import Linkify from "@/components/Linkify";
 import FollowButton from "@/components/FollowButton";
+import { Metadata } from "next";
 
 interface PageProps {
   params: { postId: string };
@@ -28,7 +29,9 @@ const getPost = cache(async (postId: string, loggedInUserId: string) => {
   return post;
 });
 
-export async function getMetadata({ params: { postId } }: PageProps) {
+export async function generateMetadata({
+  params: { postId },
+}: PageProps): Promise<Metadata> {
   const { user } = await validateRequest();
 
   if (!user) return {};
