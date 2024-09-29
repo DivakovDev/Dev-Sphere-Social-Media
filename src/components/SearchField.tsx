@@ -1,10 +1,10 @@
 "use client";
 
+import { SearchIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Input } from "./ui/input";
-import { SearchIcon } from "lucide-react";
 
-const SearchField = () => {
+export default function SearchField() {
   const router = useRouter();
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -23,5 +23,4 @@ const SearchField = () => {
       </div>
     </form>
   );
-};
-export default SearchField;
+}
