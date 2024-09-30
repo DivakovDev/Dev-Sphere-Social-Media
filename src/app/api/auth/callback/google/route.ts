@@ -26,11 +26,13 @@ export async function GET(req: NextRequest) {
   }
 
   try {
+    // Validate the authorization code with Google and get the tokens
     const tokens = await google.validateAuthorizationCode(
       code,
       storedCodeVerifier,
     );
 
+    // Retrieve Google user info using the access token
     const googleUser = await kyInstance
       .get("https://www.googleapis.com/oauth2/v1/userinfo", {
         headers: {
@@ -39,12 +41,14 @@ export async function GET(req: NextRequest) {
       })
       .json<{ id: string; name: string }>();
 
+    // Check if the user already exists in your system (database)
     const existingUser = await prisma.user.findUnique({
       where: {
         googleId: googleUser.id,
       },
     });
 
+    // If user exists, create a session and set session cookies
     if (existingUser) {
       const session = await lucia.createSession(existingUser.id, {});
       const sessionCookie = lucia.createSessionCookie(session.id);
@@ -61,10 +65,11 @@ export async function GET(req: NextRequest) {
       });
     }
 
+    // If user does not exist, create a new user and then create a session
     const userId = generateIdFromEntropySize(10);
-
     const username = slugify(googleUser.name) + "-" + userId.slice(0, 4);
 
+    // Create user and corresponding stream user
     await prisma.$transaction(async (tx) => {
       await tx.user.create({
         data: {
@@ -81,6 +86,7 @@ export async function GET(req: NextRequest) {
       });
     });
 
+    // Create session for the newly created user
     const session = await lucia.createSession(userId, {});
     const sessionCookie = lucia.createSessionCookie(session.id);
     cookies().set(
@@ -89,6 +95,7 @@ export async function GET(req: NextRequest) {
       sessionCookie.attributes,
     );
 
+    // Redirect to the homepage after successful login
     return new Response(null, {
       status: 302,
       headers: {
@@ -96,7 +103,7 @@ export async function GET(req: NextRequest) {
       },
     });
   } catch (error) {
-    console.error(error);
+    console.error("Google OAuth Error:", error);
     if (error instanceof OAuth2RequestError) {
       return new Response(null, {
         status: 400,
