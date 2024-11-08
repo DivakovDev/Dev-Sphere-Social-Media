@@ -1,5 +1,6 @@
 import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
 import { Google } from "arctic";
+import { GitHub } from "arctic";
 import { Lucia, Session, User } from "lucia";
 import { cookies } from "next/headers";
 import { cache } from "react";
@@ -44,6 +45,14 @@ export const google = new Google(
   process.env.GOOGLE_CLIENT_ID!,
   process.env.GOOGLE_CLIENT_SECRET!,
   `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/callback/google`,
+);
+
+export const github = new GitHub(
+  process.env.GITHUB_CLIENT_ID!,
+  process.env.GITHUB_CLIENT_SECRET!,
+  {
+    redirectURI: `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/callback/github-auth`,
+  }
 );
 
 export const validateRequest = cache(
